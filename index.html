@@ -67,6 +67,21 @@
     padding: 20px;
     gap: 8px;
   }
+  .exercise-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .nav-btn {
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: #999;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+  }
 
   .exercise-name {
     font-size: 22px;
@@ -240,6 +255,10 @@
 <div class="exercise-bar" id="exerciseBar"></div>
 
 <div class="counter-area">
+  <div class="exercise-nav">
+    <button class="nav-btn" onclick="prevExercise()" title="Previous exercise">← Prev</button>
+    <button class="nav-btn" onclick="nextExercise()" title="Next exercise">Next →</button>
+  </div>
   <div class="exercise-name" id="exName"></div>
   <div class="exercise-detail" id="exDetail"></div>
   <div class="set-label">Sets Done</div>
@@ -269,7 +288,25 @@
   <div class="modal">
     <h2 id="modalTitle">Add Exercise</h2>
     <label>Exercise Name</label>
-    <input type="text" id="inputName" placeholder="e.g. Bench Press" autocomplete="off">
+    <input type="text" id="inputName" list="exerciseSuggestions" placeholder="e.g. Leg Extension" autocomplete="off">
+    <datalist id="exerciseSuggestions">
+      <option value="Seated Squat Machine"></option>
+      <option value="Leg Press"></option>
+      <option value="Leg Extension"></option>
+      <option value="Seated Leg Curl"></option>
+      <option value="Hip Adduction Machine"></option>
+      <option value="Hip Abduction Machine"></option>
+      <option value="Abdominal Crunch Machine"></option>
+      <option value="Chest Press Machine"></option>
+      <option value="Pec Deck / Chest Fly"></option>
+      <option value="Lat Pulldown"></option>
+      <option value="Seated Cable Row"></option>
+      <option value="Shoulder Press Machine"></option>
+      <option value="Triceps Pushdown (Cable)"></option>
+      <option value="Biceps Curl Machine"></option>
+      <option value="Glute Kickback Machine"></option>
+      <option value="Calf Raise Machine"></option>
+    </datalist>
     <label>Target Sets</label>
     <input type="number" id="inputSets" placeholder="e.g. 4" min="1" max="20" inputmode="numeric">
     <label>Weight / Reps (optional)</label>
@@ -299,11 +336,16 @@ function load() {
     }
   } catch {}
   exercises = [
-    { name: 'Bench Press', target: 4, detail: '', count: 0 },
-    { name: 'Squat', target: 4, detail: '', count: 0 },
-    { name: 'Deadlift', target: 3, detail: '', count: 0 },
-    { name: 'OHP', target: 4, detail: '', count: 0 },
-    { name: 'Rows', target: 4, detail: '', count: 0 },
+    { name: 'Seated Squat Machine', target: 4, detail: 'Warm-up + working sets', count: 0 },
+    { name: 'Leg Extension', target: 3, detail: '', count: 0 },
+    { name: 'Seated Leg Curl', target: 3, detail: '', count: 0 },
+    { name: 'Hip Adduction Machine', target: 3, detail: '', count: 0 },
+    { name: 'Hip Abduction Machine', target: 3, detail: '', count: 0 },
+    { name: 'Abdominal Crunch Machine', target: 3, detail: '', count: 0 },
+    { name: 'Chest Press Machine', target: 3, detail: '', count: 0 },
+    { name: 'Lat Pulldown', target: 3, detail: '', count: 0 },
+    { name: 'Seated Cable Row', target: 3, detail: '', count: 0 },
+    { name: 'Shoulder Press Machine', target: 3, detail: '', count: 0 },
   ];
   activeIdx = 0;
 }
@@ -354,6 +396,18 @@ function increment() {
   exercises[activeIdx].count++;
   save(); render();
   if (navigator.vibrate) navigator.vibrate(30);
+}
+
+function nextExercise() {
+  activeIdx = (activeIdx + 1) % exercises.length;
+  save();
+  render();
+}
+
+function prevExercise() {
+  activeIdx = (activeIdx - 1 + exercises.length) % exercises.length;
+  save();
+  render();
 }
 
 function decrement() {
